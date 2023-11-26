@@ -9,7 +9,7 @@
     </FluentDialogHeader>
     <FluentDialogBody>
         <FluentStack Orientation="Orientation.Vertical">
-            <FluentSwitch Label="ダークモード" @bind-Value="DarkMode" @onchange="DarkModeChanged" />
+            <FluentSwitch Label="ダークモード" @bind-Value="@IsDark" CheckedMessage="Dark" />
             <FluentCombobox Label="アクセントカラー"
                             TOption="Option<string>"
                             OptionText="@(o => o.Text)"
@@ -84,21 +84,26 @@
     {
         if (color != null)
         {
-            await accentBaseColor.SetValueFor(MainLayout.DesignSystemProvider!.Element, color!.Value!.ToSwatch());
+            //await accentBaseColor.SetValueFor(MainLayout.DesignSystemProvider!.Element, color!.Value!.ToSwatch());
+            await accentBaseColor.WithDefault(color!.Value!.ToSwatch());
         }
     }
 
-    private async Task DarkModeChanged(ChangeEventArgs eventArgs)
+    public bool IsDark
     {
-
-        if (!DarkMode)
+        get => DarkMode;
+        set
         {
-            await baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.DarkMode.GetLuminanceValue());
+            DarkMode = value;
 
-        }
-        else
-        {
-            await baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.LightMode.GetLuminanceValue());
+            if (value)
+            {
+                baseLayerLuminance.WithDefault(StandardLuminance.DarkMode.GetLuminanceValue());
+            }
+            else
+            {
+                baseLayerLuminance.WithDefault(StandardLuminance.LightMode.GetLuminanceValue());
+            }
         }
     }
 }
