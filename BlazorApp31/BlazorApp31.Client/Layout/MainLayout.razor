@@ -1,0 +1,74 @@
+﻿@inherits LayoutComponentBase
+@rendermode InteractiveWebAssembly
+
+@*
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+            <FluentToastProvider />
+            <FluentDialogProvider />
+            <FluentTooltipProvider />
+            <FluentMessageBarProvider />
+        </article>
+    </main>
+</div>
+*@
+<FluentDesignSystemProvider @ref="DesignSystemProvider" AccentBaseColor="@AccentColor" BaseLayerLuminance="@(Luminance)" Style="height:100%">
+
+    <FluentLayout Style="height:100%">
+        <FluentHeader>
+            <FluentStack HorizontalAlignment="HorizontalAlignment.Left" Orientation="Orientation.Horizontal">
+                <FluentLabel Typo="Typography.PageTitle" Color="Color.Lightweight">C# Tokyo</FluentLabel>
+            </FluentStack>
+            
+            <FluentStack HorizontalAlignment="HorizontalAlignment.Right" Orientation="Orientation.Horizontal">
+                <HeaderSettings />
+            </FluentStack>
+        </FluentHeader>
+        <FluentStack Orientation="Orientation.Horizontal" Width="100%" Style="height:100%">
+            <NavMenu></NavMenu>
+            <FluentBodyContent>
+                @Body
+                <FluentToastProvider />
+                <FluentDialogProvider />
+                <FluentTooltipProvider />
+                <FluentMessageBarProvider />
+
+            </FluentBodyContent>
+        </FluentStack>
+        <FluentFooter Style="bottom:auto;">
+            <FluentLabel Typo="Typography.Body">© 2023 - C# Tokyo</FluentLabel>
+        </FluentFooter>
+    </FluentLayout>
+</FluentDesignSystemProvider>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    public static FluentDesignSystemProvider? DesignSystemProvider { get; set; }
+    string? AccentColor;
+
+    float? Luminance;
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            AccentColor = OfficeColor.Default.ToString();
+            Luminance = StandardLuminance.LightMode.GetLuminanceValue();
+        }
+    }
+
+}

@@ -1,0 +1,104 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components.DesignTokens
+@rendermode InteractiveWebAssembly
+
+
+<FluentIcon Icon="Icons.Regular.Size48.Settings" OnClick="Settings" Title="設定" Color="Color.Lightweight" />
+<FluentDialog Hidden=DialogHidden>
+    <FluentDialogHeader ShowDismiss="true" @ondialogdismiss="Dissmiss">
+        <FluentLabel Typo="Typography.PaneHeader">画面設定</FluentLabel>
+    </FluentDialogHeader>
+    <FluentDialogBody>
+        <FluentStack Orientation="Orientation.Vertical">
+            <FluentSwitch Label="ダークモード" @bind-Value="DarkMode" @onchange="DarkModeChanged" />
+            <FluentCombobox Label="アクセントカラー"
+                            TOption="Option<string>"
+                            OptionText="@(o => o.Text)"
+                            OptionValue="@(o => o.Value)"
+                            OptionSelected="@(o => o.Selected)"
+                            Items="AccentColors"
+                            @bind-SelectedOption="@color"
+                            @bind-Value="@AccentColor"
+                            @bind-Value:after="@AccentColorChange"/>
+        </FluentStack>
+    </FluentDialogBody>
+</FluentDialog>
+
+@code {
+    FluentDesignSystemProvider? fluentDesign;
+    [Inject]
+    private BaseLayerLuminance baseLayerLuminance { get; set; } = default!;
+    [Inject]
+    private AccentBaseColor accentBaseColor { get; set; } = default!;
+
+    private bool DialogHidden = true;
+    private bool DarkMode = false;
+    private string? AccentColor;
+    private Option<string> color = default!;
+    private List<Option<string>> AccentColors = new List<Option<string>>()
+    {
+        {new Option<string> {Value = OfficeColor.Access.GetDescription(),Text= OfficeColor.Access.ToString() } },
+        {new Option<string> {Value = OfficeColor.Booking.GetDescription(),Text= OfficeColor.Booking.ToString() } },
+        {new Option<string> {Value = OfficeColor.Excel.GetDescription(),Text= OfficeColor.Exchange.ToString() } },
+        {new Option<string> {Value = OfficeColor.Excel.GetDescription(),Text= OfficeColor.Excel.ToString() } },
+        {new Option<string> {Value = OfficeColor.GroupMe.GetDescription(),Text= OfficeColor.GroupMe.ToString() } },
+        {new Option<string> {Value = OfficeColor.Office.GetDescription(),Text= OfficeColor.Office.ToString() } },
+        {new Option<string> {Value = OfficeColor.OneDrive.GetDescription(),Text= OfficeColor.OneDrive.ToString() } },
+        {new Option<string> {Value = OfficeColor.OneNote.GetDescription(),Text= OfficeColor.OneNote.ToString() } },
+        {new Option<string> {Value = OfficeColor.Outlook.GetDescription(),Text= OfficeColor.Outlook.ToString() } },
+        {new Option<string> {Value = OfficeColor.Planner.GetDescription(),Text= OfficeColor.Planner.ToString() } },
+        {new Option<string> {Value = OfficeColor.PowerApps.GetDescription(),Text= OfficeColor.PowerApps.ToString() } },
+        {new Option<string> {Value = OfficeColor.PowerBI.GetDescription(),Text= OfficeColor.PowerBI.ToString() } },
+        {new Option<string> {Value = OfficeColor.PowerPoint.GetDescription(),Text= OfficeColor.PowerPoint.ToString() } },
+        {new Option<string> {Value = OfficeColor.Project.GetDescription(),Text= OfficeColor.Project.ToString() } },
+        {new Option<string> {Value = OfficeColor.Publisher.GetDescription(),Text= OfficeColor.Publisher.ToString() } },
+        {new Option<string> {Value = OfficeColor.SharePoint.GetDescription(),Text= OfficeColor.SharePoint.ToString() } },
+        {new Option<string> {Value = OfficeColor.Skype.GetDescription(),Text= OfficeColor.Skype.ToString() } },
+        {new Option<string> {Value = OfficeColor.Stream.GetDescription(),Text= OfficeColor.Stream.ToString() } },
+        {new Option<string> {Value = OfficeColor.Sway.GetDescription(),Text= OfficeColor.Sway.ToString() } },
+        {new Option<string> {Value = OfficeColor.Teams.GetDescription(),Text= OfficeColor.Teams.ToString() } },
+        {new Option<string> {Value = OfficeColor.Visio.GetDescription(),Text= OfficeColor.Visio.ToString() } },
+        {new Option<string> {Value = OfficeColor.Windows.GetDescription(),Text= OfficeColor.Windows.ToString() } },
+        {new Option<string> {Value = OfficeColor.Word.GetDescription(),Text= OfficeColor.Word.ToString() } },
+        {new Option<string> {Value = OfficeColor.Yammer.GetDescription(),Text= OfficeColor.Yammer.ToString() } },
+    };
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            fluentDesign = MainLayout.DesignSystemProvider;
+        }
+    }
+
+    private void Dissmiss()
+    {
+        DialogHidden = true;
+    }
+    private void Settings()
+    {
+        DialogHidden = false;
+    }
+
+
+    private async Task AccentColorChange()
+    {
+        if (color != null)
+        {
+            await accentBaseColor.SetValueFor(MainLayout.DesignSystemProvider!.Element, color!.Value!.ToSwatch());
+        }
+    }
+
+    private async Task DarkModeChanged(ChangeEventArgs eventArgs)
+    {
+
+        if (!DarkMode)
+        {
+            await baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.DarkMode.GetLuminanceValue());
+
+        }
+        else
+        {
+            await baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.LightMode.GetLuminanceValue());
+        }
+    }
+}
