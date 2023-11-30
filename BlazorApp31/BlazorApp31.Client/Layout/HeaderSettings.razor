@@ -18,7 +18,7 @@
                             Items="AccentColors"
                             @bind-SelectedOption="@color"
                             @bind-Value="@AccentColor"
-                            @bind-Value:after="@AccentColorChange"/>
+                            @bind-Value:after="@AccentColorChange" />
         </FluentStack>
     </FluentDialogBody>
 </FluentDialog>
@@ -99,10 +99,12 @@
             if (value)
             {
                 baseLayerLuminance.WithDefault(StandardLuminance.DarkMode.GetLuminanceValue());
+                //baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.DarkMode.GetLuminanceValue());
             }
             else
             {
                 baseLayerLuminance.WithDefault(StandardLuminance.LightMode.GetLuminanceValue());
+                //baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.LightMode.GetLuminanceValue());
             }
         }
     }
