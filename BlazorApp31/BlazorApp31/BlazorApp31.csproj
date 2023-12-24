@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BlazorApp31.ServiceDefaults\BlazorApp31.ServiceDefaults.csproj" />
     <ProjectReference Include="..\BlazorApp31.Client\BlazorApp31.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.1.0" />
