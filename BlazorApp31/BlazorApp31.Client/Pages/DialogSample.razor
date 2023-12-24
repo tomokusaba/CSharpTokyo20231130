@@ -1,0 +1,38 @@
+﻿@page "/DialogSample"
+
+<FluentLabel Typo="Typography.Header">DialogSample</FluentLabel>
+
+<FluentButton Title="ダイアログを表示" Appearance="Appearance.Accent" OnClick="DialogShow" >
+ダイアログを表示</FluentButton>
+
+<FluentDialog Hidden="@MVP">
+    <FluentDialogHeader>
+        <FluentLabel Typo="Typography.PaneHeader">あなたはMicrosoft MVPですか？</FluentLabel>
+    </FluentDialogHeader>
+    <FluentDialogBody>
+        <FluentDialogFooter>
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Right" VerticalAlignment="VerticalAlignment.Bottom">
+                <FluentButton Title="はい" Appearance="Appearance.Accent" OnClick="DialogHide">
+                    はい
+                </FluentButton>
+                <FluentButton Title="いいえ" Appearance="Appearance.Neutral" OnClick="DialogHide">
+                    いいえ
+                </FluentButton>
+            </FluentStack>
+        </FluentDialogFooter>
+    </FluentDialogBody>
+</FluentDialog>
+
+@code {
+    private bool MVP = true;
+
+    private void DialogShow()
+    {
+        MVP = false;
+    }
+
+    private void DialogHide()
+    {
+        MVP = true;
+    }
+}

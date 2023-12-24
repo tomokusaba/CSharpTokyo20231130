@@ -9,7 +9,12 @@
     </FluentDialogHeader>
     <FluentDialogBody>
         <FluentStack Orientation="Orientation.Vertical">
-            <FluentSwitch Label="ダークモード" @bind-Value="@IsDark" CheckedMessage="Dark" />
+            <FluentSwitch 
+                Label="ダークモード" 
+                @bind-Value="@IsDark" 
+                CheckedMessage="DarkMode" 
+                UncheckedMessage="LightMode"
+                Id="dark"/>
             <FluentCombobox Label="アクセントカラー"
                             TOption="Option<string>"
                             OptionText="@(o => o.Text)"
@@ -20,6 +25,10 @@
                             @bind-Value="@AccentColor"
                             @bind-Value:after="@AccentColorChange" />
         </FluentStack>
+            <FluentTooltip Anchor="dark">
+            <FluentLabel Typo="Typography.Body">@ScreenMode</FluentLabel>
+    </FluentTooltip>
+
     </FluentDialogBody>
 </FluentDialog>
 
@@ -32,6 +41,7 @@
 
     private bool DialogHidden = true;
     private bool DarkMode = false;
+    private string ScreenMode = "ライトモード";
     private string? AccentColor;
     private Option<string> color = default!;
     private List<Option<string>> AccentColors = new List<Option<string>>()
@@ -99,13 +109,16 @@
             if (value)
             {
                 baseLayerLuminance.WithDefault(StandardLuminance.DarkMode.GetLuminanceValue());
+                ScreenMode = "ダークモード";
                 //baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.DarkMode.GetLuminanceValue());
             }
             else
             {
                 baseLayerLuminance.WithDefault(StandardLuminance.LightMode.GetLuminanceValue());
+                ScreenMode = "ライトモード";
                 //baseLayerLuminance.SetValueFor(MainLayout.DesignSystemProvider!.Element, StandardLuminance.LightMode.GetLuminanceValue());
             }
+            StateHasChanged();
         }
     }
 }
